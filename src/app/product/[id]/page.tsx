@@ -1,19 +1,14 @@
-'use client'
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react'
-
-import { Button } from '@/components/Button'
 import { ProductContainer } from '@/styles/pages/products'
 
 import Image from 'next/image'
 
-import { requestToStripe } from './actions'
-import { useCartContext } from '@/context/CartContext'
 import { numberFormat } from '../../../utils/numberFormat'
 
-import { ProductSkeleton } from '@/components/ProductSkeleton'
-
-import { ProductsType } from '@/components/Carousel'
+import { ProductButton } from '@/components/Buttons/ProductButton'
+import { stripe } from '@/libs/stripe'
+import Stripe from 'stripe'
+import { Suspense } from 'react'
+import { Spinner } from '@/components/Spinner'
 
 interface ProductProps {
   params: {
@@ -21,65 +16,49 @@ interface ProductProps {
   }
 }
 
-export default function Product({ params: { id } }: ProductProps) {
+export default async function Product({ params: { id } }: ProductProps) {
   const productId = id
 
-  const { addProductInCart, cart } = useCartContext()
+  const response = await stripe.products.retrieve(productId, {
+    expand: ['default_price'],
+  })
 
-  const [product, setProduct] = useState({} as ProductsType)
-  const [isLoading, setIsLoading] = useState(true)
+  const price = response.default_price as Stripe.Price
 
-  async function testRequest() {
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 5000))
-
-      const response = await requestToStripe(productId)
-
-      setProduct(response)
-      setIsLoading(false)
-    } catch (error) {
-      console.error(error)
-    }
+  if (!price.unit_amount) {
+    window.location.href = '/'
+    return alert('Erro ao carregar o produto')
   }
 
-  function handleSetItemInCart() {
-    addProductInCart({ ...product, cartVarient: 'in' })
+  const product = {
+    id: response.id,
+    imageUrl: response.images[0],
+    name: response.name,
+    price: Number(price.unit_amount / 100),
+    description: String(response.description),
+    cartVarient: 'out',
+    priceId: price.id,
   }
-
-  useEffect(() => {
-    testRequest()
-  }, [])
 
   return (
-    <>
-      {isLoading ? (
-        <ProductSkeleton />
-      ) : (
-        <ProductContainer>
-          <div>
-            <Image src={product.imageUrl} alt="" width={520} height={480} />
-          </div>
+    <ProductContainer>
+      <div>
+        <Suspense fallback={<Spinner />}>
+          <Image src={product.imageUrl} alt="" width={520} height={480} />
+        </Suspense>
+      </div>
 
-          <main>
-            <h1>{product.name}</h1>
+      <main>
+        <h1>{product.name}</h1>
 
-            <span>{numberFormat(product.price)}</span>
+        <span>{numberFormat(product.price)}</span>
 
-            <div>
-              <p>{product.description}</p>
+        <div>
+          <p>{product.description}</p>
 
-              <Button
-                varient={
-                  cart.find((cartProduct) => cartProduct.id === product.id)
-                    ?.cartVarient ?? product.cartVarient
-                }
-                title="Adicionar no carrinho"
-                onClick={handleSetItemInCart}
-              />
-            </div>
-          </main>
-        </ProductContainer>
-      )}
-    </>
+          <ProductButton product={product} />
+        </div>
+      </main>
+    </ProductContainer>
   )
 }

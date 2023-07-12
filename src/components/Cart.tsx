@@ -12,7 +12,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { useState } from 'react'
 
 import { useCartContext } from '@/context/CartContext'
-import { Button } from './Button'
+import { Button } from './Buttons/Button'
 
 import { useTransition, animated, config } from '@react-spring/web'
 
@@ -26,6 +26,7 @@ import {
   Product,
   ContentContainer,
 } from '@/styles/components/header'
+
 import { Spinner } from './Spinner'
 
 export function Cart() {

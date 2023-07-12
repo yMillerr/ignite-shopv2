@@ -30,7 +30,7 @@ export const ButtonContainer = styled.button<ButtonStylesProps>`
   &:not(:disabled):hover {
     background-color: ${(props) =>
       props.varient === 'out'
-        ? props.theme.colors.green300
+        ? props.theme.colors.green500
         : props.theme.colors.red300};
   }
 

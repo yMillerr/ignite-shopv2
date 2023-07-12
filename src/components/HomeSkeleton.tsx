@@ -1,6 +1,6 @@
-import { Box, HomeSkeletonContainer } from '@/styles/components/Homeskeleton'
+import { Box, HomeSkeletonContainer } from '@/styles/components/HomeSkeleton'
 
-export function Skeleton() {
+export function HomeSkeleton() {
   return (
     <HomeSkeletonContainer>
       <Box>

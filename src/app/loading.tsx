@@ -1,5 +1,5 @@
-import { Skeleton } from '@/components/HomeSkeleton'
+import { HomeSkeleton } from '@/components/HomeSkeleton'
 
 export default function Loading() {
-  return <Skeleton />
+  return <HomeSkeleton />
 }

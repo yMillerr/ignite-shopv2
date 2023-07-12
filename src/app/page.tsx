@@ -1,5 +1,10 @@
 import { HomeContainer } from '@/styles/pages/home'
 import { Carousel } from '@/components/Carousel'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Home | Ignite-Shop',
+}
 
 export default async function Home() {
   await new Promise((resolve) => setTimeout(resolve, 2000))

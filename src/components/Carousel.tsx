@@ -13,6 +13,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 
 import handBagIcon from '../assets/handBag-icon.svg'
+
 import { useCartContext } from '@/context/CartContext'
 import { numberFormat } from '@/utils/numberFormat'
 
