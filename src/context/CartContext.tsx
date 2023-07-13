@@ -29,15 +29,7 @@ interface CartContextProps {
 const CartContext = createContext({} as CartContextProps)
 
 export function CartContextProvider({ children }: { children: ReactNode }) {
-  const [cart, setCart] = useState<CartProps[]>(() => {
-    const localCart = localStorage.getItem('cart-@ignite-shopv2')
-
-    if (localCart) {
-      return JSON.parse(localCart)
-    }
-
-    return []
-  })
+  const [cart, setCart] = useState<CartProps[]>([])
 
   function addProductInCart(product: ProductsType) {
     const haveThisProductOnTheCart = cart.find(
@@ -58,12 +50,16 @@ export function CartContextProvider({ children }: { children: ReactNode }) {
   }
 
   useEffect(() => {
-    const cartStateToString = JSON.stringify(cart)
+    const localCart = window.localStorage.getItem('cart-@ignite-shopv2')
 
-    if (cartStateToString) {
-      return localStorage.setItem('cart-@ignite-shopv2', cartStateToString)
+    if (localCart) {
+      const parsed = JSON.parse(localCart)
+      console.log(parsed)
+      return setCart(parsed)
     }
-  }, [cart])
+
+    setCart([])
+  }, [])
 
   return (
     <CartContext.Provider

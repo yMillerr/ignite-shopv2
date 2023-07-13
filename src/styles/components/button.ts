@@ -28,6 +28,7 @@ export const ButtonContainer = styled.button<ButtonStylesProps>`
   cursor: pointer;
 
   &:not(:disabled):hover {
+    transition: all 0.4s ease-in;
     background-color: ${(props) =>
       props.varient === 'out'
         ? props.theme.colors.green500

@@ -9,7 +9,7 @@ import { Handbag, X } from 'phosphor-react'
 
 import * as Dialog from '@radix-ui/react-dialog'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useCartContext } from '@/context/CartContext'
 import { Button } from './Buttons/Button'
@@ -65,6 +65,14 @@ export function Cart() {
   function handleRemoveProductFromTheCart(product: any) {
     removeProductFromTheCart({ ...product, cartVarient: 'out' })
   }
+
+  useEffect(() => {
+    const cartStateToString = JSON.stringify(cart)
+
+    if (cartStateToString) {
+      return localStorage.setItem('cart-@ignite-shopv2', cartStateToString)
+    }
+  }, [cart])
 
   return (
     <>

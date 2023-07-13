@@ -36,7 +36,7 @@ export default async function Product({ params: { id } }: ProductProps) {
     name: response.name,
     price: Number(price.unit_amount / 100),
     description: String(response.description),
-    cartVarient: 'out',
+    cartVarient: 'out' as const,
     priceId: price.id,
   }
 

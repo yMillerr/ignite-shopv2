@@ -9,10 +9,10 @@ interface ProductButtonProps {
     id: string
     description: string
     imageUrl: string
-    cartVarient: 'in' | 'out'
     name: string
     price: number
     priceId: string
+    cartVarient: 'in' | 'out'
   }
 }
 
